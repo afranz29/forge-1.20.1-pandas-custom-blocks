@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "pandas_custom_blocks:sandy_bricks"
+  },
+  "result": "pandas_custom_blocks:mixed_sandy_bricks"
+}
