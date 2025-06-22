@@ -1,0 +1,112 @@
+{
+  "multipart": [
+    {
+      "when": { "open": "false", "part": "bottom_left" },
+      "apply": { "model": "pandas_custom_blocks:block/big_sliding_door_bottom_left" }
+    },
+    {
+      "when": { "open": "false", "part": "bottom_right" },
+      "apply": { "model": "pandas_custom_blocks:block/big_sliding_door_bottom_right" }
+    },
+    {
+      "when": { "open": "false", "part": "lower_middle_left" },
+      "apply": { "model": "pandas_custom_blocks:block/big_sliding_door_lower_middle_left" }
+    },
+    {
+      "when": { "open": "false", "part": "lower_middle_right" },
+      "apply": { "model": "pandas_custom_blocks:block/big_sliding_door_lower_middle_right" }
+    },
+    {
+      "when": { "open": "false", "part": "upper_middle_left" },
+      "apply": { "model": "pandas_custom_blocks:block/big_sliding_door_upper_middle_left" }
+    },
+    {
+      "when": { "open": "false", "part": "upper_middle_right" },
+      "apply": { "model": "pandas_custom_blocks:block/big_sliding_door_upper_middle_right" }
+    },
+    {
+      "when": { "open": "false", "part": "top_left" },
+      "apply": { "model": "pandas_custom_blocks:block/big_sliding_door_top_left" }
+    },
+    {
+      "when": { "open": "false", "part": "top_right" },
+      "apply": { "model": "pandas_custom_blocks:block/big_sliding_door_top_right" }
+    },
+    {
+      "when": { "open": "true", "hinge": "left", "part": "bottom_left" },
+      "apply": { "model": "pandas_custom_blocks:block/big_sliding_door_bottom_left_open" }
+    },
+    {
+      "when": { "open": "true", "hinge": "left", "part": "bottom_right" },
+      "apply": { "model": "pandas_custom_blocks:block/big_sliding_door_bottom_right_open" }
+    },
+    {
+      "when": { "open": "true", "hinge": "left", "part": "lower_middle_left" },
+      "apply": { "model": "pandas_custom_blocks:block/big_sliding_door_lower_middle_left_open" }
+    },
+    {
+      "when": { "open": "true", "hinge": "left", "part": "lower_middle_right" },
+      "apply": { "model": "pandas_custom_blocks:block/big_sliding_door_lower_middle_right_open" }
+    },
+    {
+      "when": { "open": "true", "hinge": "left", "part": "upper_middle_left" },
+      "apply": { "model": "pandas_custom_blocks:block/big_sliding_door_upper_middle_left_open" }
+    },
+    {
+      "when": { "open": "true", "hinge": "left", "part": "upper_middle_right" },
+      "apply": { "model": "pandas_custom_blocks:block/big_sliding_door_upper_middle_right_open" }
+    },
+    {
+      "when": { "open": "true", "hinge": "left", "part": "top_left" },
+      "apply": { "model": "pandas_custom_blocks:block/big_sliding_door_top_left_open" }
+    },
+    {
+      "when": { "open": "true", "hinge": "left", "part": "top_right" },
+      "apply": { "model": "pandas_custom_blocks:block/big_sliding_door_top_right_open" }
+    },
+    {
+      "when": { "open": "true", "hinge": "right", "part": "bottom_left" },
+      "apply": { "model": "pandas_custom_blocks:block/big_sliding_door_bottom_left_open", "y": 180 }
+    },
+    {
+      "when": { "open": "true", "hinge": "right", "part": "bottom_right" },
+      "apply": { "model": "pandas_custom_blocks:block/big_sliding_door_bottom_right_open", "y": 180 }
+    },
+    {
+      "when": { "open": "true", "hinge": "right", "part": "lower_middle_left" },
+      "apply": { "model": "pandas_custom_blocks:block/big_sliding_door_lower_middle_left_open", "y": 180 }
+    },
+    {
+      "when": { "open": "true", "hinge": "right", "part": "lower_middle_right" },
+      "apply": { "model": "pandas_custom_blocks:block/big_sliding_door_lower_middle_right_open", "y": 180 }
+    },
+    {
+      "when": { "open": "true", "hinge": "right", "part": "upper_middle_left" },
+      "apply": { "model": "pandas_custom_blocks:block/big_sliding_door_upper_middle_left_open", "y": 180 }
+    },
+    {
+      "when": { "open": "true", "hinge": "right", "part": "upper_middle_right" },
+      "apply": { "model": "pandas_custom_blocks:block/big_sliding_door_upper_middle_right_open", "y": 180 }
+    },
+    {
+      "when": { "open": "true", "hinge": "right", "part": "top_left" },
+      "apply": { "model": "pandas_custom_blocks:block/big_sliding_door_top_left_open", "y": 180 }
+    },
+    {
+      "when": { "open": "true", "hinge": "right", "part": "top_right" },
+      "apply": { "model": "pandas_custom_blocks:block/big_sliding_door_top_right_open", "y": 180 }
+    },
+    {
+      "when": { "facing": "east" },
+      "apply": { "y": 90 }
+    },
+    {
+      "when": { "facing": "south" },
+      "apply": { "y": 180 }
+    },
+    {
+      "when": { "facing": "west" },
+      "apply": { "y": 270 }
+    }
+  ]
+}

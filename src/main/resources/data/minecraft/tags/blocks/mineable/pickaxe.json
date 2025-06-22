@@ -1,6 +1,8 @@
 {
   "values": [
+    "pandas_custom_blocks:sandy_bricks",
     "pandas_custom_blocks:mixed_sandy_bricks",
-    "pandas_custom_blocks:mixed_sandy_bricks_two"
+    "pandas_custom_blocks:mixed_sandy_bricks_two",
+    "pandas_custom_blocks:big_sliding_door"
   ]
 }
