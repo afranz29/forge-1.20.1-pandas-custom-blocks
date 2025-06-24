@@ -1,11 +1,11 @@
 {
   "textures": {
-    "all": "pandas_custom_blocks:block/big_sliding_door_bottom_right"
+    "all": "pandas_custom_blocks:block/big_sliding_door_lower_middle_left"
   },
   "elements": [
     {
-      "from": [-16, 0, 0],
-      "to": [0, 16, 3],
+      "from": [ 16, 0, 0 ],
+      "to": [ 32, 16, 3 ],
       "faces": {
         "north": {"uv": [16, 0, 0, 16], "texture": "#all"},
         "east": {"uv": [0, 0, 3, 16], "texture": "#all"},
