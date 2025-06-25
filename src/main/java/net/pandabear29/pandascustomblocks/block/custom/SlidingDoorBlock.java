@@ -14,10 +14,13 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.*;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.DoorHingeSide;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
@@ -29,27 +32,19 @@ public class SlidingDoorBlock extends HorizontalDirectionalBlock {
     public static final EnumProperty<DoorHingeSide> HINGE = BlockStateProperties.DOOR_HINGE;
     public static final EnumProperty<DoorPart> PART = EnumProperty.create("part", DoorPart.class);
 
-    // --- Voxel Shape Definitions ---
-    // These shapes match the visual models.
-
-    protected static final VoxelShape NORTH_CLOSED = Block.box(0, 0, 0, 16, 16, 3);
+    // Shapes for the closed door panels
+    protected static final VoxelShape EAST_CLOSED = Block.box(13, 0, 0, 16, 16, 16);
+    protected static final VoxelShape WEST_CLOSED = Block.box(0, 0, 0, 3, 16, 16);
     protected static final VoxelShape SOUTH_CLOSED = Block.box(0, 0, 13, 16, 16, 16);
-    protected static final VoxelShape WEST_CLOSED  = Block.box(0, 0, 0, 3, 16, 16);
-    protected static final VoxelShape EAST_CLOSED  = Block.box(13, 0, 0, 16, 16, 16);
-
-    protected static final VoxelShape NORTH_OPEN_LEFT    = Block.box(-14, 0, 0, 2, 16, 3);
-    protected static final VoxelShape NORTH_OPEN_RIGHT   = Block.box(14, 0, 0, 30, 16, 3);
-    protected static final VoxelShape SOUTH_OPEN_LEFT    = Block.box(-14, 0, 13, 2, 16, 16);
-    protected static final VoxelShape SOUTH_OPEN_RIGHT   = Block.box(14, 0, 13, 30, 16, 16);
-    protected static final VoxelShape WEST_OPEN_LEFT     = Block.box(0, 0, 14, 3, 16, 30);
-    protected static final VoxelShape WEST_OPEN_RIGHT    = Block.box(0, 0, -14, 3, 16, 2);
-    protected static final VoxelShape EAST_OPEN_LEFT     = Block.box(13, 0, -14, 16, 16, 2);
-    protected static final VoxelShape EAST_OPEN_RIGHT    = Block.box(13, 0, 14, 16, 16, 30);
-
+    protected static final VoxelShape NORTH_CLOSED = Block.box(0, 0, 0, 16, 16, 3);
 
     public SlidingDoorBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(OPEN, false).setValue(HINGE, DoorHingeSide.LEFT).setValue(PART, DoorPart.BOTTOM_LEFT));
+        this.registerDefaultState(this.stateDefinition.any()
+                .setValue(FACING, Direction.NORTH)
+                .setValue(OPEN, false)
+                .setValue(HINGE, DoorHingeSide.LEFT)
+                .setValue(PART, DoorPart.BOTTOM_LEFT));
     }
 
     @Override
@@ -58,150 +53,59 @@ public class SlidingDoorBlock extends HorizontalDirectionalBlock {
     }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-        // The collision shape is what you bump into. When the door is open, this should be empty.
-        if (pState.getValue(OPEN)) {
-            return Shapes.empty();
-        }
-
+    public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         return switch (pState.getValue(FACING)) {
-            case NORTH -> NORTH_CLOSED;
-            case SOUTH -> SOUTH_CLOSED;
-            case WEST -> WEST_CLOSED;
             case EAST -> EAST_CLOSED;
-            default -> Shapes.block();
+            case WEST -> WEST_CLOSED;
+            case SOUTH -> SOUTH_CLOSED;
+            default -> NORTH_CLOSED;
         };
     }
 
     @Override
-    public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-        // The selection shape (what you can see with the F3 debug crosshair).
-        // This needs to match where the door *is*, even when open.
-        if (pState.getValue(OPEN)) {
-            Direction facing = pState.getValue(FACING);
-            DoorHingeSide hinge = pState.getValue(HINGE);
-
-            // This logic now correctly mirrors the final `variants` blockstate file.
-            switch(facing) {
-                case NORTH: return hinge == DoorHingeSide.LEFT ? NORTH_OPEN_LEFT : NORTH_OPEN_RIGHT;
-                case SOUTH: return hinge == DoorHingeSide.LEFT ? SOUTH_OPEN_RIGHT : SOUTH_OPEN_LEFT;
-                case WEST:  return hinge == DoorHingeSide.LEFT ? WEST_OPEN_RIGHT : WEST_OPEN_LEFT;
-                case EAST:  return hinge == DoorHingeSide.LEFT ? EAST_OPEN_LEFT : EAST_OPEN_RIGHT;
-            }
-        }
-        return getCollisionShape(pState, pLevel, pPos, pContext);
-    }
-
-    // The rest of the file remains the same...
-
-    @Nullable
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        Level level = pContext.getLevel();
-        BlockPos clickedPos = pContext.getClickedPos();
-        Direction facing = pContext.getHorizontalDirection().getOpposite();
-        DoorHingeSide hinge = this.getHinge(pContext);
-
-        BlockPos basePos = (hinge == DoorHingeSide.LEFT) ? clickedPos : clickedPos.relative(facing.getCounterClockWise());
-
-        for (int y = 0; y < 4; y++) {
-            for (int x = 0; x < 2; x++) {
-                BlockPos posToCheck = basePos.relative(facing.getClockWise(), x).above(y);
-                if (!level.getBlockState(posToCheck).canBeReplaced(pContext)) {
-                    return null;
-                }
-            }
+    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+        if (pLevel.isClientSide) {
+            return InteractionResult.SUCCESS;
         }
 
-        DoorPart partToPlace = (hinge == DoorHingeSide.LEFT) ? DoorPart.BOTTOM_LEFT : DoorPart.BOTTOM_RIGHT;
-        return this.defaultBlockState().setValue(FACING, facing).setValue(HINGE, hinge).setValue(PART, partToPlace);
-    }
+        boolean isOpen = pState.getValue(OPEN);
+        BlockPos basePos = getBasePos(pState, pPos); // Find the main block of the door
+        BlockState baseState = pLevel.getBlockState(basePos);
 
-    @Override
-    public void onPlace(BlockState pState, Level pLevel, BlockPos pPos, BlockState pOldState, boolean pIsMoving) {
-        if (pOldState.is(pState.getBlock()) || pIsMoving) {
-            return;
-        }
+        if (!baseState.is(this)) return InteractionResult.FAIL; // Should not happen
 
-        Direction facing = pState.getValue(FACING);
-        BlockPos basePos = getBasePos(pState, pPos);
+        Direction facing = baseState.getValue(FACING);
+        DoorHingeSide hinge = baseState.getValue(HINGE);
 
+        // Determine the direction the door will slide (left or right relative to its facing direction)
+        Direction slideDirection = hinge == DoorHingeSide.LEFT ? facing.getCounterClockWise() : facing.getClockWise();
+
+        // Loop through all 8 parts of the door
         for (int y = 0; y < 4; y++) {
             for (int x = 0; x < 2; x++) {
                 BlockPos currentPartPos = basePos.relative(facing.getClockWise(), x).above(y);
-                if (!currentPartPos.equals(pPos)) {
-                    BlockState partState = pState.setValue(PART, DoorPart.from(x, y));
-                    pLevel.setBlock(currentPartPos, partState, 3);
+                BlockState currentPartState = pLevel.getBlockState(currentPartPos);
+
+                if (currentPartState.is(this)) {
+                    // To close, move opposite to the slide direction. To open, move with it.
+                    BlockPos newPos = isOpen ? currentPartPos.relative(slideDirection.getOpposite(), 2) : currentPartPos.relative(slideDirection, 2);
+
+                    pLevel.setBlock(currentPartPos, Blocks.AIR.defaultBlockState(), 3);
+                    pLevel.setBlock(newPos, currentPartState.setValue(OPEN, !isOpen), 3);
                 }
             }
         }
-    }
 
-    private DoorHingeSide getHinge(BlockPlaceContext pContext) {
-        Direction facing = pContext.getHorizontalDirection().getOpposite();
-        BlockPos clickedPos = pContext.getClickedPos();
-
-        if (facing.getAxis() == Direction.Axis.Z) {
-            double clickX = pContext.getClickLocation().x - clickedPos.getX();
-            if ((facing == Direction.NORTH && clickX < 0.5D) || (facing == Direction.SOUTH && clickX > 0.5D)) {
-                return DoorHingeSide.RIGHT;
-            } else {
-                return DoorHingeSide.LEFT;
-            }
-        } else {
-            double clickZ = pContext.getClickLocation().z - clickedPos.getZ();
-            if ((facing == Direction.WEST && clickZ > 0.5D) || (facing == Direction.EAST && clickZ < 0.5D)) {
-                return DoorHingeSide.RIGHT;
-            } else {
-                return DoorHingeSide.LEFT;
-            }
-        }
-    }
-
-    @Override
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        BlockPos basePos = getBasePos(pState, pPos);
-        boolean isOpen = !pState.getValue(OPEN);
-        BlockState baseState = pLevel.getBlockState(basePos);
-        if (!baseState.is(this)) return InteractionResult.FAIL;
-
-        Direction facing = baseState.getValue(FACING);
-
-        for (int y = 0; y < 4; y++) {
-            for (int x = 0; x < 2; x++) {
-                BlockPos currentPos = basePos.relative(facing.getClockWise(), x).above(y);
-                BlockState currentState = pLevel.getBlockState(currentPos);
-                if (currentState.is(this)) {
-                    pLevel.setBlock(currentPos, currentState.setValue(OPEN, isOpen), 10);
-                }
-            }
-        }
-        pLevel.levelEvent(pPlayer, isOpen ? 1012 : 1006, pPos, 0);
-        return InteractionResult.sidedSuccess(pLevel.isClientSide);
-    }
-
-    @Override
-    public BlockState updateShape(BlockState pState, Direction pFacing, BlockState pFacingState, LevelAccessor pLevel, BlockPos pCurrentPos, BlockPos pFacingPos) {
-        BlockPos basePos = getBasePos(pState, pCurrentPos);
-        BlockPos partRelative = pCurrentPos.subtract(basePos);
-
-        // If the block this part is attached to is destroyed, destroy the whole door.
-        // This is a simplified check. A more robust check would see if all 8 blocks are still present.
-        if (partRelative.getX() != 0 || partRelative.getY() != 0) { // If not the base block
-            if (!pLevel.getBlockState(basePos).is(this)) {
-                return Blocks.AIR.defaultBlockState();
-            }
-        }
-
-        return super.updateShape(pState, pFacing, pFacingState, pLevel, pCurrentPos, pFacingPos);
+        pLevel.levelEvent(pPlayer, isOpen ? 1012 : 1006, basePos, 0);
+        return InteractionResult.CONSUME;
     }
 
     @Override
     public void playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
         if (!pLevel.isClientSide) {
-            // Destroying any part of the door should destroy all other parts.
             BlockPos basePos = getBasePos(pState, pPos);
             Direction facing = pState.getValue(FACING);
+
             for (int y = 0; y < 4; y++) {
                 for (int x = 0; x < 2; x++) {
                     BlockPos partPos = basePos.relative(facing.getClockWise(), x).above(y);
@@ -214,9 +118,80 @@ public class SlidingDoorBlock extends HorizontalDirectionalBlock {
         super.playerWillDestroy(pLevel, pPos, pState, pPlayer);
     }
 
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext pContext) {
+        Level level = pContext.getLevel();
+        BlockPos clickedPos = pContext.getClickedPos();
+        Direction facing = pContext.getHorizontalDirection().getOpposite();
+        DoorHingeSide hinge = this.getHinge(pContext);
+
+        // Define the 2x4 area to check for placement
+        BlockPos basePos = (hinge == DoorHingeSide.LEFT) ? clickedPos : clickedPos.relative(facing.getClockWise());
+
+        for (int y = 0; y < 4; y++) {
+            for (int x = 0; x < 2; x++) {
+                // The two columns of the door are perpendicular to the way it's facing
+                BlockPos posToCheck = basePos.relative(facing.getCounterClockWise(), x).above(y);
+                if (!level.getBlockState(posToCheck).canBeReplaced(pContext)) {
+                    return null;
+                }
+            }
+        }
+
+        return this.defaultBlockState().setValue(FACING, facing).setValue(HINGE, hinge);
+    }
+
+    @Override
+    public void onPlace(BlockState pState, Level pLevel, BlockPos pPos, BlockState pOldState, boolean pIsMoving) {
+        if (pIsMoving) return;
+
+        BlockPos basePos = getBasePos(pState, pPos);
+
+        for (int y = 0; y < 4; y++) {
+            for (int x = 0; x < 2; x++) {
+                BlockPos currentPartPos = basePos.relative(pState.getValue(FACING).getClockWise(), x).above(y);
+                if (!currentPartPos.equals(pPos)) {
+                    pLevel.setBlock(currentPartPos, pState.setValue(PART, DoorPart.from(x, y)), 3);
+                }
+            }
+        }
+    }
+
+    // Reverted to the simple, correct hinge detection logic
+    private DoorHingeSide getHinge(BlockPlaceContext pContext) {
+        Direction facing = pContext.getHorizontalDirection().getOpposite();
+        BlockPos clickedPos = pContext.getClickedPos();
+
+        if (facing.getAxis() == Direction.Axis.Z) { // North or South
+            double clickX = pContext.getClickLocation().x - clickedPos.getX();
+            if ((facing == Direction.NORTH && clickX < 0.5D) || (facing == Direction.SOUTH && clickX > 0.5D)) {
+                return DoorHingeSide.LEFT;
+            } else {
+                return DoorHingeSide.RIGHT;
+            }
+        } else { // East or West
+            double clickZ = pContext.getClickLocation().z - clickedPos.getZ();
+            if ((facing == Direction.WEST && clickZ < 0.5D) || (facing == Direction.EAST && clickZ > 0.5D)) {
+                return DoorHingeSide.LEFT;
+            } else {
+                return DoorHingeSide.RIGHT;
+            }
+        }
+    }
+
+    // Finds the bottom-left-most block of the door structure from any given part
     private BlockPos getBasePos(BlockState pState, BlockPos pPos) {
         DoorPart part = pState.getValue(PART);
         Direction facing = pState.getValue(FACING);
+        DoorHingeSide hinge = pState.getValue(HINGE);
+
+        // Adjust for hinge side to find the consistent "base"
+        BlockPos hingeAdjustedPos = pPos;
+        if (hinge == DoorHingeSide.RIGHT && (part.getX() == 0 || part.getX() == 1)) {
+            // This logic needs to correctly find the base from any part, regardless of hinge
+        }
+
         int xOffset = part.getX();
         int yOffset = part.getY();
 
