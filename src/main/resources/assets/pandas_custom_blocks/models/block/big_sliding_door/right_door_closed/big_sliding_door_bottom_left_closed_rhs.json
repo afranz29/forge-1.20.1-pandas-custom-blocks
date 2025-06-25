@@ -1,6 +1,6 @@
 {
   "textures": {
-    "all": "pandas_custom_blocks:block/big_sliding_door_bottom_left"
+    "all": "pandas_custom_blocks:block/big_sliding_door/big_sliding_door_bottom_left"
   },
   "elements": [
     {
