@@ -78,8 +78,26 @@ public class SlidingDoorBlock extends HorizontalDirectionalBlock {
         DoorHingeSide hinge = baseState.getValue(HINGE);
 
         // Determine the direction the door will slide (left or right relative to its facing direction)
-        Direction slideDirection = hinge == DoorHingeSide.LEFT ? facing.getCounterClockWise() : facing.getClockWise();
+        Direction slideDirection = hinge == DoorHingeSide.LEFT ? facing.getClockWise() : facing.getCounterClockWise();
 
+        // --- Obstruction Check ---
+        // Only check for obstructions if we are trying to OPEN the door.
+        if (!isOpen) {
+            for (int y = 0; y < 4; y++) {
+                for (int x = 0; x < 2; x++) {
+                    BlockPos currentPartPos = basePos.relative(facing.getClockWise(), x).above(y);
+                    BlockPos destinationPos = currentPartPos.relative(slideDirection, 2);
+
+                    // If the destination block is not replaceable (e.g., it's not air),
+                    // then the door cannot open.
+                    if (!pLevel.getBlockState(destinationPos).canBeReplaced(new BlockPlaceContext(pPlayer, pHand, pPlayer.getItemInHand(pHand), pHit))) {
+                        return InteractionResult.FAIL; // Blocked, so do nothing.
+                    }
+                }
+            }
+        }
+
+        // --- Move the Door ---
         // Loop through all 8 parts of the door
         for (int y = 0; y < 4; y++) {
             for (int x = 0; x < 2; x++) {
@@ -172,7 +190,7 @@ public class SlidingDoorBlock extends HorizontalDirectionalBlock {
             }
         } else { // East or West
             double clickZ = pContext.getClickLocation().z - clickedPos.getZ();
-            if ((facing == Direction.WEST && clickZ < 0.5D) || (facing == Direction.EAST && clickZ > 0.5D)) {
+            if ((facing == Direction.WEST && clickZ > 0.5D) || (facing == Direction.EAST && clickZ < 0.5D)) {
                 return DoorHingeSide.LEFT;
             } else {
                 return DoorHingeSide.RIGHT;
