@@ -144,19 +144,30 @@ public class SlidingDoorBlock extends HorizontalDirectionalBlock {
         Direction facing = pContext.getHorizontalDirection().getOpposite();
         DoorHingeSide hinge = this.getHinge(pContext);
 
-        // Define the 2x4 area to check for placement
-        BlockPos basePos = (hinge == DoorHingeSide.LEFT) ? clickedPos : clickedPos.relative(facing.getClockWise());
+        // Determine the starting corner of the 2x4 area based on the hinge
+        BlockPos basePos;
+        if (hinge == DoorHingeSide.RIGHT) {
+            // If it's a right-hinge door, the block the player clicks on is the right column.
+            // The base of the door is one block counter-clockwise from the clicked position.
+            basePos = clickedPos.relative(facing.getClockWise());
+        } else {
+            // If it's a left-hinge door, the clicked block is the left column, which is the base.
+            basePos = clickedPos;
+        }
 
+        // Now, check the entire 2x4 area for any obstructions
         for (int y = 0; y < 4; y++) {
             for (int x = 0; x < 2; x++) {
-                // The two columns of the door are perpendicular to the way it's facing
-                BlockPos posToCheck = basePos.relative(facing.getCounterClockWise(), x).above(y);
+                BlockPos posToCheck = basePos.relative(facing.getClockWise(), x).above(y);
+
                 if (!level.getBlockState(posToCheck).canBeReplaced(pContext)) {
+                    // If any block in the 2x4 area cannot be replaced, cancel the placement.
                     return null;
                 }
             }
         }
 
+        // If the entire area is clear, place the door.
         return this.defaultBlockState().setValue(FACING, facing).setValue(HINGE, hinge);
     }
 
@@ -169,7 +180,7 @@ public class SlidingDoorBlock extends HorizontalDirectionalBlock {
         for (int y = 0; y < 4; y++) {
             for (int x = 0; x < 2; x++) {
                 BlockPos currentPartPos = basePos.relative(pState.getValue(FACING).getClockWise(), x).above(y);
-                if (!currentPartPos.equals(pPos)) {
+                if (!currentPartPos.equals(pPos) && pLevel.getBlockState(currentPartPos).canBeReplaced()) {
                     pLevel.setBlock(currentPartPos, pState.setValue(PART, DoorPart.from(x, y)), 3);
                 }
             }
