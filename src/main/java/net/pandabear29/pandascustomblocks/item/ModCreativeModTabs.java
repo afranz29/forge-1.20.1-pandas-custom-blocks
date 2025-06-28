@@ -25,7 +25,7 @@ public class ModCreativeModTabs {
                         output.accept(ModBlocks.MIXED_SANDY_BRICKS.get());
                         output.accept(ModBlocks.MIXED_SANDY_BRICKS_TWO.get());
 
-                        output.accept(ModBlocks.BIG_SLIDING_DOOR.get());
+                        output.accept(ModBlocks.BIG_BIRCH_SLIDING_DOOR.get());
                     })
                     .build());
 

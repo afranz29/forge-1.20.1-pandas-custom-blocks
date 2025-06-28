@@ -8,7 +8,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
@@ -143,32 +142,39 @@ public class SlidingDoorBlock extends HorizontalDirectionalBlock {
         BlockPos clickedPos = pContext.getClickedPos();
         Direction facing = pContext.getHorizontalDirection().getOpposite();
         DoorHingeSide hinge = this.getHinge(pContext);
-
-        // Determine the starting corner of the 2x4 area based on the hinge
         BlockPos basePos;
+        DoorPart part;
+
         if (hinge == DoorHingeSide.RIGHT) {
-            // If it's a right-hinge door, the block the player clicks on is the right column.
-            // The base of the door is one block counter-clockwise from the clicked position.
-            basePos = clickedPos.relative(facing.getClockWise());
-        } else {
-            // If it's a left-hinge door, the clicked block is the left column, which is the base.
+            // For a right-hinge door, the player clicks the left column.
             basePos = clickedPos;
+            part = DoorPart.BOTTOM_RIGHT;
+        } else {
+            // For a left-hinge door, the player clicks the right column.
+            basePos = clickedPos.relative(facing.getClockWise());
+            part = DoorPart.BOTTOM_LEFT;
         }
 
-        // Now, check the entire 2x4 area for any obstructions
+        // Check if the 2x4 area is clear for placement.
+        BlockPos posToCheck;
         for (int y = 0; y < 4; y++) {
             for (int x = 0; x < 2; x++) {
-                BlockPos posToCheck = basePos.relative(facing.getClockWise(), x).above(y);
+                if (hinge == DoorHingeSide.RIGHT) {
+                    posToCheck = basePos.relative(facing.getCounterClockWise(), x).above(y);
+                } else {
+                    posToCheck = basePos.relative(facing.getClockWise(), x).above(y);
+                }
 
                 if (!level.getBlockState(posToCheck).canBeReplaced(pContext)) {
-                    // If any block in the 2x4 area cannot be replaced, cancel the placement.
-                    return null;
+                    return null; // Obstruction found, cancel placement.
                 }
             }
         }
 
-        // If the entire area is clear, place the door.
-        return this.defaultBlockState().setValue(FACING, facing).setValue(HINGE, hinge);
+        return this.defaultBlockState()
+                .setValue(FACING, facing)
+                .setValue(HINGE, hinge)
+                .setValue(PART, part);
     }
 
     @Override
@@ -213,13 +219,6 @@ public class SlidingDoorBlock extends HorizontalDirectionalBlock {
     private BlockPos getBasePos(BlockState pState, BlockPos pPos) {
         DoorPart part = pState.getValue(PART);
         Direction facing = pState.getValue(FACING);
-        DoorHingeSide hinge = pState.getValue(HINGE);
-
-        // Adjust for hinge side to find the consistent "base"
-        BlockPos hingeAdjustedPos = pPos;
-        if (hinge == DoorHingeSide.RIGHT && (part.getX() == 0 || part.getX() == 1)) {
-            // This logic needs to correctly find the base from any part, regardless of hinge
-        }
 
         int xOffset = part.getX();
         int yOffset = part.getY();

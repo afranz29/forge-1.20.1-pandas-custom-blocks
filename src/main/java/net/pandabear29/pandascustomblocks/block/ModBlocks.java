@@ -30,8 +30,8 @@ public class ModBlocks {
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.BRICKS)));
 
 
-    public static final RegistryObject<Block> BIG_SLIDING_DOOR = registerBlock("big_sliding_door",
-            () -> new SlidingDoorBlock(BlockBehaviour.Properties.copy(Blocks.OAK_DOOR).noOcclusion()));
+    public static final RegistryObject<Block> BIG_BIRCH_SLIDING_DOOR = registerBlock("big_birch_sliding_door",
+            () -> new SlidingDoorBlock(BlockBehaviour.Properties.copy(Blocks.BIRCH_DOOR).noOcclusion()));
 
     // register blocks as item
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {

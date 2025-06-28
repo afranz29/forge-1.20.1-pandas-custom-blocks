@@ -1,6 +1,0 @@
-{
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "pandas_custom_blocks:item/big_sliding_door"
-  }
-}
