@@ -1,0 +1,20 @@
+{
+  "textures": {
+    "particle": "pandas_custom_blocks:block/big_birch_sliding_door/big_sliding_door_lower_middle_right",
+    "all": "pandas_custom_blocks:block/big_birch_sliding_door/big_sliding_door_lower_middle_right"
+  },
+  "elements": [
+    {
+      "from": [ 0, 0, 0 ],
+      "to": [ 16, 16, 3 ],
+      "faces": {
+        "north": {"uv": [16, 0, 0, 16], "texture": "#all"},
+        "east": {"uv": [13, 0, 16, 16], "texture": "#all"},
+        "south": {"uv": [0, 0, 16, 16], "texture": "#all"},
+        "west": {"uv": [0, 0, 3, 16], "texture": "#all"},
+        "up": {"uv": [0, 0, 16, 3], "texture": "#all"},
+        "down": {"uv": [0, 13, 16, 16], "texture": "#all"}
+      }
+    }
+  ]
+}
