@@ -22,7 +22,18 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).
                 add(ModBlocks.SANDY_BRICKS.get(),
                     ModBlocks.MIXED_SANDY_BRICKS.get(),
-                    ModBlocks.MIXED_SANDY_BRICKS_TWO.get()
+                    ModBlocks.MIXED_SANDY_BRICKS_TWO.get(),
+                    ModBlocks.MIXED_SANDY_BRICK_STAIRS.get(),
+                    ModBlocks.MIXED_SANDY_BRICK_STAIRS_TWO.get(),
+                    ModBlocks.MIXED_SANDY_BRICK_SLAB.get(),
+                    ModBlocks.MIXED_SANDY_BRICK_SLAB_TWO.get(),
+                    ModBlocks.MIXED_SANDY_BRICK_WALL.get(),
+                    ModBlocks.MIXED_SANDY_BRICK_WALL_TWO.get()
+                );
+
+        this.tag(BlockTags.WALLS)
+                .add(ModBlocks.MIXED_SANDY_BRICK_WALL.get(),
+                     ModBlocks.MIXED_SANDY_BRICK_WALL_TWO.get()
                 );
     }
 }

@@ -23,9 +23,18 @@ public class ModCreativeModTabs {
 
                         output.accept(ModBlocks.SANDY_BRICKS.get());
                         output.accept(ModBlocks.MIXED_SANDY_BRICKS.get());
+                        output.accept(ModBlocks.MIXED_SANDY_BRICK_STAIRS.get());
+                        output.accept(ModBlocks.MIXED_SANDY_BRICK_SLAB.get());
+                        output.accept(ModBlocks.MIXED_SANDY_BRICK_WALL.get());
+
                         output.accept(ModBlocks.MIXED_SANDY_BRICKS_TWO.get());
+                        output.accept(ModBlocks.MIXED_SANDY_BRICK_STAIRS_TWO.get());
+                        output.accept(ModBlocks.MIXED_SANDY_BRICK_SLAB_TWO.get());
+                        output.accept(ModBlocks.MIXED_SANDY_BRICK_WALL_TWO.get());
 
                         output.accept(ModBlocks.BIG_BIRCH_SLIDING_DOOR.get());
+
+                        output.accept(ModBlocks.MEDIUM_SPRUCE_SLIDING_DOOR.get());
                     })
                     .build());
 

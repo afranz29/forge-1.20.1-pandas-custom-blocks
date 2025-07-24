@@ -3,9 +3,19 @@
 
   "block.pandas_custom_blocks.sandy_bricks": "Sandy Bricks",
   "block.pandas_custom_blocks.mixed_sandy_bricks": "Mixed Sandy Bricks",
+  "block.pandas_custom_blocks.mixed_sandy_brick_stairs": "Mixed Sandy Brick Stairs",
+  "block.pandas_custom_blocks.mixed_sandy_brick_slab": "Mixed Sandy Brick Slab",
+  "block.pandas_custom_blocks.mixed_sandy_brick_wall": "Mixed Sandy Brick Wall",
+
+
   "block.pandas_custom_blocks.mixed_sandy_bricks_two": "Mixed Sandy Bricks Style 2",
+  "block.pandas_custom_blocks.mixed_sandy_brick_stairs_two": "Mixed Sandy Brick Stairs Style 2",
+  "block.pandas_custom_blocks.mixed_sandy_brick_slab_two": "Mixed Sandy Brick Slab Style 2",
+  "block.pandas_custom_blocks.mixed_sandy_brick_wall_two": "Mixed Sandy Brick Wall Style 2",
 
   "block.pandas_custom_blocks.big_birch_sliding_door": "Big Birch Sliding Door",
+
+  "block.pandas_custom_blocks.medium_spruce_sliding_door": "Medium Spruce Sliding Door",
 
   "creativetab.pandas_custom_blocks_tab": "Pandas Custom Blocks"
 }

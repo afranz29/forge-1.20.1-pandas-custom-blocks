@@ -39,6 +39,15 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         // Stonecutting recipes
         stonecutterResult(pWriter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.MIXED_SANDY_BRICKS.get(), ModBlocks.SANDY_BRICKS.get(), 1);
         stonecutterResult(pWriter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.MIXED_SANDY_BRICKS_TWO.get(), ModBlocks.SANDY_BRICKS.get(), 1);
+
+        stonecutterResult(pWriter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.MIXED_SANDY_BRICK_STAIRS.get(), ModBlocks.MIXED_SANDY_BRICKS.get(), 1);
+        stonecutterResult(pWriter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.MIXED_SANDY_BRICK_SLAB.get(), ModBlocks.MIXED_SANDY_BRICKS.get(), 1);
+        stonecutterResult(pWriter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.MIXED_SANDY_BRICK_WALL.get(), ModBlocks.MIXED_SANDY_BRICKS.get(), 1);
+
+        stonecutterResult(pWriter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.MIXED_SANDY_BRICK_STAIRS_TWO.get(), ModBlocks.MIXED_SANDY_BRICKS_TWO.get(), 1);
+        stonecutterResult(pWriter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.MIXED_SANDY_BRICK_SLAB_TWO.get(), ModBlocks.MIXED_SANDY_BRICKS_TWO.get(), 1);
+        stonecutterResult(pWriter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.MIXED_SANDY_BRICK_WALL_TWO.get(), ModBlocks.MIXED_SANDY_BRICKS_TWO.get(), 1);
+
     }
 
     // Helper method for stonecutting recipes to prevent errors with existing recipe names
