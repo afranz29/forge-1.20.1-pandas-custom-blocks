@@ -1,5 +1,6 @@
 {
   "values": [
-    "pandas_custom_blocks:big_sliding_door"
+    "pandas_custom_blocks:big_sliding_door",
+    "pandas_custom_blocks:medium_spruce_sliding_door"
   ]
 }

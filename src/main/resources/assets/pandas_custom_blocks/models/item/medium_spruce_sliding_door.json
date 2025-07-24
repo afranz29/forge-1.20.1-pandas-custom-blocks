@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "pandas_custom_blocks:item/medium_spruce_sliding_door"
+  }
+}
