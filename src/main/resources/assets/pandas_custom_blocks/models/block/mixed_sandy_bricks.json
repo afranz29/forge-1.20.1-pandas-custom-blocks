@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "pandas_custom_blocks:block/mixed_sandy_bricks"
-  }
-}
