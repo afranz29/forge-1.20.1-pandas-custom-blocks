@@ -49,6 +49,8 @@ public class ModBlocks {
     // 2x4 SLIDING DOORS
     public static final RegistryObject<Block> BIG_BIRCH_SLIDING_DOOR = registerBlock("big_birch_sliding_door",
             () -> new BigSlidingDoorBlock(BlockBehaviour.Properties.copy(Blocks.BIRCH_DOOR).noOcclusion()));
+    public static final RegistryObject<Block> BIG_SPRUCE_SLIDING_DOOR = registerBlock("big_spruce_sliding_door",
+            () -> new BigSlidingDoorBlock(BlockBehaviour.Properties.copy(Blocks.SPRUCE_DOOR).noOcclusion()));
 
     // 2x3 SLIDING DOORS
     public static final RegistryObject<Block> MEDIUM_SPRUCE_SLIDING_DOOR = registerBlock("medium_spruce_sliding_door",
